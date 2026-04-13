@@ -1,12 +1,62 @@
-## CURSO - APLICACIÓN DE LA ANÁLITICA
-1. Introducción
+# Proyecto Analitica III
 
-En el sector financiero, la evaluación del riesgo crediticio constituye uno de los pilares fundamentales para la toma de decisiones estratégicas en entidades bancarias y cooperativas de crédito. La capacidad de identificar oportunamente a clientes con alta probabilidad de incumplimiento en sus obligaciones financieras permite a las organizaciones mitigar pérdidas, optimizar la gestión de su cartera y fortalecer la sostenibilidad del negocio. En este contexto, la detección temprana de clientes con comportamiento moroso resulta crítica, dado que un crédito mal otorgado no solo representa una pérdida económica directa, sino que también afecta la liquidez de la entidad y su capacidad de operar eficientemente.
+## Descripcion
+Este proyecto desarrolla un modelo de clasificacion para predecir mora mayor a 30 dias en un horizonte de 3 meses (`M3_30AC`) usando variables sociodemograficas y financieras de clientes.
 
-El presente estudio aborda un problema de clasificación binaria, cuyo objetivo es predecir si un cliente presentará mora superior a 30 días en un período de 3 meses (M3_30AC), a partir de un conjunto de variables sociodemográficas y financieras. Este problema reviste especial importancia en la práctica, dado que los errores de clasificación tienen consecuencias asimétricas: no detectar a un cliente riesgoso implica asumir una pérdida por incumplimiento, mientras que clasificar erróneamente a un cliente solvente como moroso puede derivar en la exclusión de un buen cliente y el deterioro de la relación comercial. Por tanto, se requiere un modelo que no solo tenga alta capacidad predictiva global, sino que maximice la detección de los casos de incumplimiento real, priorizando el recall de la clase positiva como métrica principal de evaluación.
+El enfoque prioriza la deteccion de clientes morosos (recall de la clase positiva), ya que el costo de no detectar un cliente en riesgo es alto para el negocio.
 
-El conjunto de datos utilizado está conformado por 21.091 registros de clientes de un concepcionario, cada uno descrito por 12 variables que capturan diferentes dimensiones del perfil del solicitante. Las variables sociodemográficas incluyen Edad, Genero y Perfil (asalariado o independiente), mientras que las variables financieras y crediticias comprenden ScoreCrediticio, PorcentajeFinanciacion, Plazo, IngresoEstimado, Gastos, CapacidadDePago, ValorCuotaMensual y Estado del crédito (nuevo o usado). La variable objetivo M3_30AC indica si el cliente presentó mora mayor a 30 días en los últimos 3 meses, donde 1 corresponde a clientes con mora y 0 a clientes sin mora. La distribución de esta variable evidencia un desbalance severo: el 96,03% de los registros pertenece a la clase negativa (sin mora) y solo el 3,97% a la clase positiva (con mora), lo que representa una proporción aproximada de 24:1. Este desbalance implica que un modelo ingenuo que prediga siempre la clase mayoritaria alcanzaría una precisión global del 96% sin detectar ningún caso de incumplimiento, lo cual es inaceptable desde la perspectiva del negocio. Para mitigar este problema, se aplica una estrategia de undersampling aleatorio con una proporción 1:2, conservando todos los registros de la clase minoritaria y extrayendo una muestra representativa de la clase mayoritaria.
+## Que se hizo
+Se ejecuto un flujo completo de analitica y modelado:
 
-El desarrollo del estudio sigue una estructura metodológica que inicia con un análisis exploratorio de datos, orientado a identificar patrones, distribuciones y variables con capacidad discriminante entre clases. Posteriormente, se realiza el ajuste de un modelo de red neuronal artificial, incluyendo la optimización de hiperparámetros y un proceso de selección de variables basado en los hallazgos del análisis exploratorio. Finalmente, se evalúa el desempeño del modelo bajo diferentes configuraciones, comparando los resultados y justificando la selección del modelo final.
+1. Carga de librerias y base de datos.
+2. Revision general de estructura de datos.
+3. Validacion de calidad: nulos, duplicados y estadisticas descriptivas.
+4. Balanceo de clases con undersampling 1:2.
+5. Codificacion de variables categoricas y limpieza final.
+6. EDA con graficos de distribucion, densidad, boxplot, correlacion, ECDF y deciles.
+7. Construccion del modelo base (red neuronal).
+8. Optimizacion de hiperparametros.
+9. Entrenamiento del modelo optimizado con variables seleccionadas.
+10. Evaluacion comparativa y seleccion del modelo final.
 
-El objetivo de este estudio es desarrollar un modelo de clasificación basado en redes neuronales artificiales que permita identificar clientes con riesgo de incumplimiento crediticio a partir de variables sociodemográficas y financieras, con el fin de apoyar la toma de decisiones en la gestión del riesgo de crédito y contribuir a la reducción de pérdidas por mora en los concepcionarios de vehiculos con servivios de financiación.
+## Datos
+- Tamano de la base original: 21.091 registros.
+- Variable objetivo: `M3_30AC`.
+- Desbalance inicial aproximado: 96% clase 0 y 4% clase 1.
+- Balanceo aplicado para entrenamiento: proporcion 1:2 (clase 1:clase 0).
+
+## Donde esta la base de datos
+Actualmente el notebook carga el archivo desde una ruta local:
+
+`/Users/yedisoncuervo/Downloads/BD taller clasificación (2) (2).xlsx`
+
+Sin embargo, se puede acceder la base de datos a través del siguiente link de drive.
+
+# BD Drive
+https://docs.google.com/spreadsheets/d/1qSyguOGmzchg6AjadiekvsqUAXytKLDf/edit?usp=sharing&ouid=106337131126808334437&rtpof=true&sd=true
+
+
+Para facilitar la reproducibilidad, se recomienda mover el archivo a una carpeta `data/` dentro del proyecto y actualizar la ruta en el notebook.
+
+## Estructura del proyecto
+```text
+PROYECTO_ANALITRICA_III/
+├── README.md
+└── src/
+	└── Modelo_RN_1.ipynb
+```
+
+## Como ejecutar
+1. Abrir `src/Modelo_RN_1.ipynb` en VS Code/Jupyter.
+2. Verificar la ruta del archivo de datos en la celda de carga.
+3. Ejecutar las celdas en orden, de arriba hacia abajo.
+
+## Herramientas principales
+- Python
+- pandas, numpy
+- matplotlib, seaborn, scipy
+- scikit-learn
+- TensorFlow / Keras
+
+## Resultado general
+Se compararon un modelo base optimizado y un modelo con variables seleccionadas con diferentes arquiteturas y parametros. La seleccion final se hizo con base en desempeno predictivo (especialmente recall de clase positiva), estabilidad y simplicidad del modelo.
